@@ -1,61 +1,14 @@
-from cement.logger import logging
-from cement.exception import CSException
-from cement.utils import get_collection_as_dataframe
-import sys,os
-from cement.entity import config_entity
-from cement.components.data_ingestion import DataIngestion
-from cement.components.data_validation import DataValidation
-from cement.components.data_transformation import DataTransformation
-from cement.components.model_trainer import ModelTrainer
-from cement.components.model_evaluation import ModelEvaluation
-from cement.components.model_pusher import ModelPusher
+from cement.pipeline.training_pipeline import start_training_pipeline
+from cement.pipeline.batch_prediction import start_batch_prediction
+
+file_path="/config/workspace/Concrete_Data.csv"
 
 print(__name__)
+
 if __name__=="__main__":
-    try:
-        training_pipeline_config = config_entity.TrainingPipelineConfig()
-        data_ingestion_config  = config_entity.DataIngestionConfig(training_pipeline_config=training_pipeline_config)
-        print(data_ingestion_config.to_dict())
-        data_ingestion = DataIngestion(data_ingestion_config=data_ingestion_config)
-        data_ingestion_artifact = data_ingestion.initiate_data_ingestion()
-        
-        #data validation
-        data_validation_config = config_entity.DataValidationConfig(training_pipeline_config=training_pipeline_config)
-        data_validation = DataValidation(data_validation_config=data_validation_config,
-                        data_ingestion_artifact=data_ingestion_artifact)
-
-        data_validation_artifact = data_validation.initiate_data_validation()
-
-        #data transformation
-        data_transformation_config = config_entity.DataTransformationConfig(training_pipeline_config=training_pipeline_config)
-        data_transformation = DataTransformation(data_transformation_config=data_transformation_config, 
-        data_ingestion_artifact=data_ingestion_artifact)
-        data_transformation_artifact = data_transformation.initiate_data_transformation()
-        
-        #model trainer
-        model_trainer_config = config_entity.ModelTrainerConfig(training_pipeline_config=training_pipeline_config)
-        model_trainer = ModelTrainer(model_trainer_config=model_trainer_config, data_transformation_artifact=data_transformation_artifact)
-        model_trainer_artifact = model_trainer.initiate_model_trainer()
-       
-        #model evaluation
-        model_eval_config = config_entity.ModelEvaluationConfig(training_pipeline_config=training_pipeline_config)
-        model_eval  = ModelEvaluation(model_eval_config=model_eval_config,
-        data_ingestion_artifact=data_ingestion_artifact,
-        data_transformation_artifact=data_transformation_artifact,
-        model_trainer_artifact=model_trainer_artifact)
-        model_eval_artifact = model_eval.initiate_model_evaluation()
-
-        #model pusher
-        model_pusher_config = config_entity.ModelPusherConfig(training_pipeline_config)
-        
-        model_pusher = ModelPusher(model_pusher_config=model_pusher_config, 
-                data_transformation_artifact=data_transformation_artifact,
-                model_trainer_artifact=model_trainer_artifact)
-
-        model_pusher_artifact = model_pusher.initiate_model_pusher()
-    except Exception as e:
-        raise CSException(e, sys)
-
-        
-    except Exception as e:
-        print(e)
+     try:
+          start_training_pipeline()
+          output_file = start_batch_prediction(input_file_path=file_path)
+          print(output_file)
+     except Exception as e: 
+          print(e)

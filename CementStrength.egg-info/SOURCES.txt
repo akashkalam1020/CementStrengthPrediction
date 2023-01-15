@@ -15,8 +15,12 @@ cement/components/__init__.py
 cement/components/data_ingestion.py
 cement/components/data_transformation.py
 cement/components/data_validation.py
+cement/components/model_evaluation.py
+cement/components/model_pusher.py
 cement/components/model_trainer.py
 cement/entity/__init__.py
 cement/entity/artifact_entity.py
 cement/entity/config_entity.py
 cement/pipeline/__init__.py
+cement/pipeline/batch_prediction.py
+cement/pipeline/training_pipeline.py
