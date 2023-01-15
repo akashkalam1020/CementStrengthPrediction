@@ -4,7 +4,6 @@ from cement.pipeline.batch_prediction import start_batch_prediction
 file_path="/config/workspace/Concrete_Data.csv"
 
 print(__name__)
-
 if __name__=="__main__":
      try:
           start_training_pipeline()
