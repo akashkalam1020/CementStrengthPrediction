@@ -11,14 +11,7 @@ demotest.py
 logs
 artifacts
 raw_data
-
-# Deployment files hide for temporarily purpose
-start.sh
-Dockerfile
-docker-compose.yaml
-.dockerignore
-.github/
-airflow/
+!**/__pycache__/
 
 # Distribution / packaging
 .Python
