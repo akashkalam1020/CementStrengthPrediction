@@ -29,7 +29,7 @@ def start_batch_prediction(input_file_path):
         prediction = model.predict(input_arr)
         df["prediction"]=prediction
 
-        logging.info(f"Saving prediction file.....,")
+        logging.info(f"End of the Prediction....,Saving prediction file.....,")
         prediction_file_name = os.path.basename(input_file_path).replace(".csv",f"{datetime.now().strftime('%m%d%Y__%H%M%S')}.csv")
         prediction_file_path = os.path.join(PREDICTION_DIR,prediction_file_name)
         df.to_csv(prediction_file_path,index=False,header=True)
